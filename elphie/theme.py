@@ -39,6 +39,9 @@ class Theme:
         tt_style = TextStyle()
         tt_style.font = "Ubuntu Mono"
 
+        bf_style = TextStyle()
+        bf_style.bold = True
+
         code_style = TextStyle()
         code_style.font = "Ubuntu Mono"
         code_style.align = "left"
@@ -84,6 +87,7 @@ class Theme:
         self.text_styles = {
             "default": default_style,
             "tt": tt_style,
+            "bf": bf_style,
             "emph": emph_style,
             "alert": alert_style,
             "h1": h1_style,
