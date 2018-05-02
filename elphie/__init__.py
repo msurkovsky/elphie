@@ -1,4 +1,5 @@
 from elphie.slides import Slides  # noqa
+from elphie.images import Images  # noqa
 from elphie.theme import Theme, BlueTheme, BlueTheme2  # noqa
 from elphie.elements import Element  # noqa
 from elphie.utils import SizeRequest, Rect  # noqa

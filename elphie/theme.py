@@ -170,6 +170,15 @@ class Theme:
         rect = Rect(0, top, width, height - top)
         ctx.slide.element.render(ctx, rect)
 
+    def render_raw_image(self, ctx):
+        image = ctx.image
+        renderer = ctx.renderer
+        width = image.width(ctx)
+        height = image.height(ctx)
+
+        rect = Rect(0, 0, width, height)
+        ctx.image.element.render(ctx, rect)
+
     # Text
 
     def get_text_offset(self, style):
@@ -240,6 +249,19 @@ class Theme:
 
     def get_box_size_request(self, ctx, box):
         requests = [self._get_size_request_of_elements(ctx, layer, 10)
+                    for layer in box.layers]
+        return merge_size_requests(requests)
+
+    # Padding less Box
+
+    def render_padding_less_box(self, ctx, rect, box):
+        for layer in box.layers:
+            self._make_rects_vertical(
+                ctx, rect, layer, 0, False,
+                lambda e, r: e.render(ctx, r))
+
+    def get_box_padding_less_size_request(self, ctx, box):
+        requests = [self._get_size_request_of_elements(ctx, layer, 0)
                     for layer in box.layers]
         return merge_size_requests(requests)
 
@@ -342,7 +364,8 @@ class Theme:
         return results
 
     def _get_size_request_of_elements(self, ctx, elements, padding):
-        requests = self._get_size_requests(ctx, elements)
+        # empty (0,0) request in the case that requests is empty
+        requests = self._get_size_requests(ctx, elements) + [SizeRequest(0, 0)]
         height = sum(rq.height for rq in requests) + len(elements) * padding
         width = max(rq.width for rq in requests)
         return SizeRequest(width, height)

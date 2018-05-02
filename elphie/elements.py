@@ -249,6 +249,15 @@ class Box(Element):
         ctx.theme.render_box(ctx, rect, self)
 
 
+class PaddingLessBox(Box):
+
+    def get_size_request(self, ctx):
+        return ctx.theme.get_box_padding_less_size_request(ctx, self)
+
+    def render_body(self, ctx, rect):
+        ctx.theme.render_padding_less_box(ctx, rect, self)
+
+
 def _parse_label(element):
     label = element.get("{http://www.inkscape.org/namespaces/inkscape}label")
     if label is None:
