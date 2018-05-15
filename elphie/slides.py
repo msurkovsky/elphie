@@ -208,10 +208,10 @@ class Slides:
 
         # Join everything into one file
         self._show_progress("Creating '{}'".format(self.filename), first=True)
-        args = ["pdftk"]
-        args += [os.path.join(self.cache_dir, filename)
+        args = ["pdfunite"]
+        args += [os.path.join(self.cache_dir, filename) # inputs
                  for filename in filenames]
-        args += ["cat", "output", self.filename]
+        args += [self.filename] # outputs
         subprocess.call(args)
         self._show_progress("Creating '{}'".format(self.filename), last=True)
 
