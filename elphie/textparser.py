@@ -26,9 +26,16 @@ def parse_text(text, escape_char="~", begin_char="{", end_char="}"):
     start = 0
     i = 0
     counter = 0
+    invalidate_special_chars = False
     while i < len(text):
         c = text[i]
-        if c == escape_char:
+        if c == "\\":
+            result.append(("text", text[start:i]))
+            i += 1
+            start = i
+            invalidate_special_chars = True
+
+        if c == escape_char and not invalidate_special_chars:
             result.append(("text", text[start:i]))
             i += 1
             start = i
@@ -38,7 +45,7 @@ def parse_text(text, escape_char="~", begin_char="{", end_char="}"):
             i += 1
             start = i
             counter += 1
-        elif c == end_char:
+        elif c == end_char and not invalidate_special_chars:
             result.append(("text", text[start:i]))
             result.append(("end", None))
             i += 1
@@ -48,6 +55,9 @@ def parse_text(text, escape_char="~", begin_char="{", end_char="}"):
                 raise Exception("Invalid format, too many closing characters")
         else:
             i += 1
+
+        invalidate_special_chars = False
+
     if i != start:
         result.append(("text", text[start:i]))
 
